@@ -317,8 +317,8 @@
   const cards  = Array.from(document.querySelectorAll('.pc'));
   const origRots = cards.map(c => parseFloat(c.dataset.rot) || 0);
 
-  // Start cards upright (counter their outward tilt)
-  cards.forEach((c, i) => gsap.set(c, { rotation: 0 }));
+  // Set each card to face outward radially
+  cards.forEach((c, i) => gsap.set(c, { rotation: origRots[i] }));
 
   let targetRot  = 0;
   let currentRot = 0;
@@ -340,8 +340,8 @@
     if (Math.abs(diff) > 0.005) {
       currentRot += diff * 0.07;
       gsap.set(wheel, { rotation: currentRot });
-      // Counter-rotate each card to keep them upright as the wheel spins
-      cards.forEach(c => gsap.set(c, { rotation: -currentRot }));
+      // Keep each card facing outward (no counter-rotation needed)
+      cards.forEach((c, i) => gsap.set(c, { rotation: origRots[i] }));
     }
   });
 
