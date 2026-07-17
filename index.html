@@ -243,7 +243,7 @@
        Angles: 0° = top, 22.5° steps clockwise.
        Each card rotates = its angle so it faces outward naturally.
   -->
-  <div id="arcSection" style="position:absolute;top:1000px;left:0;width:1440px;height:2100px;pointer-events:none;overflow:visible;">
+  <div id="arcSection" style="position:absolute;top:764px;left:0;width:1440px;height:2100px;pointer-events:none;overflow:visible;">
     <div id="arcWheel" style="position:absolute;left:720px;top:1000px;width:0;height:0;transform-origin:0 0;will-change:transform;">
 
       <!-- R=650  card=166×210  half=83×105 -->
@@ -362,7 +362,7 @@
 
   function getProgress() {
     const scale   = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--scale')) || 1;
-    const startPx = 1000 * scale;
+    const startPx = 764 * scale;
     const endPx   = 3100 * scale;
     const sy      = window.scrollY + window.innerHeight * 0.6;
     return Math.max(0, Math.min(1, (sy - startPx) / (endPx - startPx)));
