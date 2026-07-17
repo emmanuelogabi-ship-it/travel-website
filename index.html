@@ -142,24 +142,30 @@
     .hero-slide {
       position: absolute;
       inset: 0;
-      overflow: hidden;
-      transform: translateY(100%);
-      will-change: transform;
+      opacity: 0;
     }
-    .hero-slide.active {
-      transform: translateY(0%);
-    }
+    .hero-slide.active { opacity: 1; }
     .hero-slide img {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transform: translateY(30%) scale(1.08);
-      will-change: transform;
     }
-    .hero-slide.active img {
-      transform: translateY(0%) scale(1);
+
+    /* ── 4 PANEL REVEAL ── */
+    .hero-panels {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      z-index: 20;
+      pointer-events: none;
+    }
+    .hero-panel {
+      flex: 1;
+      background: #fffaf5;
+      transform: translateY(101%);
+      will-change: transform;
     }
 
     /* ── ARC WHEEL ── */
@@ -221,6 +227,12 @@
     <div class="hero-slide"><img src="images/shaain-ibrahim-WhavwKQeFCw-unsplash.jpg" alt=""></div>
     <div class="hero-slide"><img src="images/taras-terletskyy-OrhPYiKmXsE-unsplash.jpg" alt=""></div>
     <div class="hero-slide"><img src="images/neom-aWHKsYkbCi8-unsplash.jpg" alt=""></div>
+    <div class="hero-panels">
+      <div class="hero-panel"></div>
+      <div class="hero-panel"></div>
+      <div class="hero-panel"></div>
+      <div class="hero-panel"></div>
+    </div>
   </div>
   <p class="hero-title">Reverb.</p>
 
@@ -412,39 +424,40 @@
 
 
 
-  // ── Hero slideshow — Codegrid roll-up: container slides up, image counter-translates ──
-  const slides = Array.from(document.querySelectorAll('.hero-slide'));
+  // ── Hero slideshow — 4-panel wipe ──
+  const slides  = Array.from(document.querySelectorAll('.hero-slide'));
+  const panels  = Array.from(document.querySelectorAll('.hero-panel'));
   let current = 0;
+  let animating = false;
 
   function nextSlide() {
-    const prev = slides[current];
-    current = (current + 1) % slides.length;
-    const next = slides[current];
+    if (animating) return;
+    animating = true;
 
-    // Stack: incoming on top
-    gsap.set(next, { zIndex: 2, y: '100%' });
-    gsap.set(next.querySelector('img'), { y: '30%', scale: 1.08 });
-    prev.style.zIndex = 1;
+    const next = slides[(current + 1) % slides.length];
 
-    // Container rolls up from below
-    gsap.to(next, {
+    // 1. Panels slide UP from below to cover current image (staggered)
+    gsap.set(panels, { y: '101%' });
+    gsap.to(panels, {
       y: '0%',
-      duration: 1.2,
-      ease: 'power3.inOut',
+      duration: 0.5,
+      ease: 'power2.inOut',
+      stagger: 0.06,
       onComplete: () => {
-        prev.classList.remove('active');
-        gsap.set(prev, { y: '100%', zIndex: '' });
-        next.classList.add('active');
-        next.style.zIndex = '';
-      }
-    });
+        // 2. Swap image while panels cover everything
+        slides[current].classList.remove('active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('active');
 
-    // Image counter-translates downward as container rises — parallax roll
-    gsap.to(next.querySelector('img'), {
-      y: '0%',
-      scale: 1,
-      duration: 1.6,
-      ease: 'power2.out'
+        // 3. Panels slide UP off the top to reveal new image
+        gsap.to(panels, {
+          y: '-101%',
+          duration: 0.5,
+          ease: 'power2.inOut',
+          stagger: 0.06,
+          onComplete: () => { animating = false; }
+        });
+      }
     });
   }
 
