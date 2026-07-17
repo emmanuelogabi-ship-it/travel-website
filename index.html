@@ -320,38 +320,43 @@
     gsap.set(card, { rotation: rot });
   });
 
-  // ── GSAP wheel rotation on scroll ──
-  // Rotate the wheel 180° as the arc section scrolls past,
-  // so every card passes through the visible top arc.
-  gsap.to('#arcWheel', {
-    rotation: -180,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: '#arcSection',
-      start: 'top 85%',
-      end: 'bottom 15%',
-      scrub: 1.5,
+  // ── Smooth scroll-driven wheel rotation (lerp via GSAP ticker) ──
+  // Avoids ScrollTrigger fighting the CSS scale transform on .page.
+  const wheel = document.getElementById('arcWheel');
+
+  let targetRot  = 0;
+  let currentRot = 0;
+
+  function getProgress() {
+    const scale  = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--scale')) || 1;
+    // arcSection: top=950px, height=2200px in unscaled page coords
+    const startPx = 950  * scale;          // screen-px where animation begins
+    const endPx   = 3150 * scale;          // screen-px where animation ends
+    const sy      = window.scrollY + window.innerHeight * 0.65;
+    return Math.max(0, Math.min(1, (sy - startPx) / (endPx - startPx)));
+  }
+
+  window.addEventListener('scroll', () => {
+    targetRot = getProgress() * -180;
+  }, { passive: true });
+
+  // RAF loop via GSAP ticker — lerp factor 0.07 = very smooth
+  gsap.ticker.add(() => {
+    const diff = targetRot - currentRot;
+    if (Math.abs(diff) > 0.005) {
+      currentRot += diff * 0.07;
+      gsap.set(wheel, { rotation: currentRot });
     }
   });
 
-  // Fade section in/out
-  gsap.fromTo('#arcSection',
-    { opacity: 0 },
-    {
-      opacity: 1,
-      duration: 0.5,
-      scrollTrigger: {
-        trigger: '#arcSection',
-        start: 'top 90%',
-        end: 'top 60%',
-        scrub: true,
-      }
-    }
-  );
-
-  // ── Legacy scroll scale (kept for non-GSAP elements) ──
-  const FAN_X = 720;
-  const FAN_Y = 2050;
+  // Fade the arc section in as it enters the viewport
+  window.addEventListener('scroll', () => {
+    const scale   = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--scale')) || 1;
+    const fadeStart = 900 * scale;
+    const fadeEnd   = 1200 * scale;
+    const t = Math.max(0, Math.min(1, (window.scrollY - fadeStart) / (fadeEnd - fadeStart)));
+    document.getElementById('arcSection').style.opacity = t;
+  }, { passive: true });
 
 </script>
 </body>
