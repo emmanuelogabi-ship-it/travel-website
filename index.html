@@ -212,84 +212,96 @@
   <!-- SEARCH CARD -->
   <div class="search-card"></div>
 
-  <!-- ── ARC WHEEL ──
-       All 14 cards are children of #arcWheel, positioned relative to the
-       circle centre at page (720, 2050). GSAP rotates the whole wheel on scroll.
-       Card offsets = card_page_pos − (720, 2050).
+  <!-- ── FULL CIRCLE WHEEL ──
+       16 cards at R=650 around centre (720, 2000) in page coords.
+       Wheel origin is at that centre; card offsets = polar → cartesian.
+       Angles: 0° = top, 22.5° steps clockwise.
+       Each card rotates = its angle so it faces outward naturally.
   -->
-  <div id="arcSection" style="position:absolute;top:950px;left:0;width:1440px;height:2200px;pointer-events:none;overflow:visible;">
-    <div id="arcWheel" style="position:absolute;left:720px;top:1100px;width:0;height:0;transform-origin:0 0;will-change:transform;">
+  <div id="arcSection" style="position:absolute;top:1000px;left:0;width:1440px;height:2100px;pointer-events:none;overflow:visible;">
+    <div id="arcWheel" style="position:absolute;left:720px;top:1000px;width:0;height:0;transform-origin:0 0;will-change:transform;">
 
-      <!-- card helper: each .pw sits at offset from wheel centre; .pc holds the tilt -->
+      <!-- R=650  card=166×210  half=83×105 -->
+      <!-- left = 650·sin(θ)−83   top = −650·cos(θ)−105 -->
 
-      <!-- 0 — top centre, 0° -->
-      <div class="pw" style="left:-83px;top:-814px;width:166px;height:210px;">
+      <!-- θ=0°   → left=−83   top=−755 -->
+      <div class="pw" style="left:-83px;top:-755px;width:166px;height:210px;">
         <div class="pc" data-rot="0"><img src="images/taras-terletskyy-OrhPYiKmXsE-unsplash.jpg" alt=""></div>
       </div>
 
-      <!-- 1 — slight left, −23° -->
-      <div class="pw" style="left:-388px;top:-785px;width:237px;height:260px;">
-        <div class="pc" data-rot="-23"><img src="images/tania-mousinho-vF0l0bqLRKY-unsplash.jpg" alt=""></div>
+      <!-- θ=22.5° → left=166   top=−706 -->
+      <div class="pw" style="left:166px;top:-706px;width:166px;height:210px;">
+        <div class="pc" data-rot="22.5"><img src="images/tania-mousinho-vF0l0bqLRKY-unsplash.jpg" alt=""></div>
       </div>
 
-      <!-- 2 — slight right, +23° -->
-      <div class="pw" style="left:149px;top:-783px;width:237px;height:260px;">
-        <div class="pc" data-rot="23"><img src="images/daniela-cuevas-t7YycgAoVSw-unsplash.jpg" alt=""></div>
+      <!-- θ=45°   → left=377   top=−565 -->
+      <div class="pw" style="left:377px;top:-565px;width:166px;height:210px;">
+        <div class="pc" data-rot="45"><img src="images/shaain-ibrahim-WhavwKQeFCw-unsplash.jpg" alt=""></div>
       </div>
 
-      <!-- 3 — left, 135° -->
-      <div class="pw" style="left:-608px;top:-632px;width:266px;height:266px;">
-        <div class="pc" data-rot="135"><img src="images/aleksandra-b-wVtwlktxQE0-unsplash.jpg" alt=""></div>
+      <!-- θ=67.5° → left=518   top=−354 -->
+      <div class="pw" style="left:518px;top:-354px;width:166px;height:210px;">
+        <div class="pc" data-rot="67.5"><img src="images/ionut-dobre-0D1nf8pKON8-unsplash.jpg" alt=""></div>
       </div>
 
-      <!-- 4 — right, −135° -->
-      <div class="pw" style="left:337px;top:-632px;width:266px;height:266px;">
-        <div class="pc" data-rot="-135"><img src="images/shaain-ibrahim-WhavwKQeFCw-unsplash.jpg" alt=""></div>
+      <!-- θ=90°   → left=567   top=−105 -->
+      <div class="pw" style="left:567px;top:-105px;width:166px;height:210px;">
+        <div class="pc" data-rot="90"><img src="images/joshua-rawson-harris-S4ZkQykkeRs-unsplash.jpg" alt=""></div>
       </div>
 
-      <!-- 5 — far left, −67° -->
-      <div class="pw" style="left:-749px;top:-371px;width:257px;height:234px;">
-        <div class="pc" data-rot="-67"><img src="images/miraxh-tereziu-1RKlecE_ehI-unsplash.jpg" alt=""></div>
+      <!-- θ=112.5° → left=518  top=144 -->
+      <div class="pw" style="left:518px;top:144px;width:166px;height:210px;">
+        <div class="pc" data-rot="112.5"><img src="images/ryan-spencer-XGKaRnWjv1c-unsplash.jpg" alt=""></div>
       </div>
 
-      <!-- 6 — far right, −113° -->
-      <div class="pw" style="left:478px;top:-391px;width:259px;height:234px;">
-        <div class="pc" data-rot="-113"><img src="images/ionut-dobre-0D1nf8pKON8-unsplash.jpg" alt=""></div>
+      <!-- θ=135°  → left=377   top=355 -->
+      <div class="pw" style="left:377px;top:355px;width:166px;height:210px;">
+        <div class="pc" data-rot="135"><img src="images/pierre-blache-R5ne5S9R_cs-unsplash.jpg" alt=""></div>
       </div>
 
-      <!-- 7 — lower left, −113° -->
-      <div class="pw" style="left:-742px;top:213px;width:259px;height:237px;">
-        <div class="pc" data-rot="-113"><img src="images/anna-murzilon-Eu8v-aKZdFg-unsplash.jpg" alt=""></div>
+      <!-- θ=157.5° → left=166  top=496 -->
+      <div class="pw" style="left:166px;top:496px;width:166px;height:210px;">
+        <div class="pc" data-rot="157.5"><img src="images/oleg-oros-YIQAvqbSyjw-unsplash.jpg" alt=""></div>
       </div>
 
-      <!-- 8 — lower right, −67° -->
-      <div class="pw" style="left:487px;top:196px;width:257px;height:235px;">
-        <div class="pc" data-rot="-67"><img src="images/pierre-blache-R5ne5S9R_cs-unsplash.jpg" alt=""></div>
+      <!-- θ=180°  → left=−83   top=545 -->
+      <div class="pw" style="left:-83px;top:545px;width:166px;height:210px;">
+        <div class="pc" data-rot="180"><img src="images/hasmik-ghazaryan-olson-z5ivBl5Dd1s-unsplash.jpg" alt=""></div>
       </div>
 
-      <!-- 9 — lower far left, −135° -->
-      <div class="pw" style="left:-608px;top:422px;width:266px;height:266px;">
-        <div class="pc" data-rot="-135"><img src="images/oleg-oros-YIQAvqbSyjw-unsplash.jpg" alt=""></div>
+      <!-- θ=202.5° → left=−332 top=496 -->
+      <div class="pw" style="left:-332px;top:496px;width:166px;height:210px;">
+        <div class="pc" data-rot="202.5"><img src="images/lucas-t-photography-E769yCcpYKo-unsplash.jpg" alt=""></div>
       </div>
 
-      <!-- 10 — lower far right, 135° -->
-      <div class="pw" style="left:337px;top:422px;width:266px;height:266px;">
-        <div class="pc" data-rot="135"><img src="images/ryan-spencer-XGKaRnWjv1c-unsplash.jpg" alt=""></div>
+      <!-- θ=225°  → left=−543  top=355 -->
+      <div class="pw" style="left:-543px;top:355px;width:166px;height:210px;">
+        <div class="pc" data-rot="225"><img src="images/niklas-ohlrogge-niamoh-de-BkmdKnuAZtw-unsplash.jpg" alt=""></div>
       </div>
 
-      <!-- 11 — lower left of centre, +23° -->
-      <div class="pw" style="left:-392px;top:580px;width:237px;height:260px;">
-        <div class="pc" data-rot="23"><img src="images/niklas-ohlrogge-niamoh-de-BkmdKnuAZtw-unsplash.jpg" alt=""></div>
+      <!-- θ=247.5° → left=−684 top=144 -->
+      <div class="pw" style="left:-684px;top:144px;width:166px;height:210px;">
+        <div class="pc" data-rot="247.5"><img src="images/miraxh-tereziu-1RKlecE_ehI-unsplash.jpg" alt=""></div>
       </div>
 
-      <!-- 12 — lower right of centre, −23° -->
-      <div class="pw" style="left:146px;top:582px;width:237px;height:260px;">
-        <div class="pc" data-rot="-23"><img src="images/joshua-rawson-harris-S4ZkQykkeRs-unsplash.jpg" alt=""></div>
+      <!-- θ=270°  → left=−733  top=−105 -->
+      <div class="pw" style="left:-733px;top:-105px;width:166px;height:210px;">
+        <div class="pc" data-rot="270"><img src="images/neom-aWHKsYkbCi8-unsplash.jpg" alt=""></div>
       </div>
 
-      <!-- 13 — bottom centre, 0° -->
-      <div class="pw" style="left:-83px;top:671px;width:166px;height:210px;">
-        <div class="pc" data-rot="0"><img src="images/hasmik-ghazaryan-olson-z5ivBl5Dd1s-unsplash.jpg" alt=""></div>
+      <!-- θ=292.5° → left=−684 top=−354 -->
+      <div class="pw" style="left:-684px;top:-354px;width:166px;height:210px;">
+        <div class="pc" data-rot="292.5"><img src="images/anna-murzilon-Eu8v-aKZdFg-unsplash.jpg" alt=""></div>
+      </div>
+
+      <!-- θ=315°  → left=−543  top=−565 -->
+      <div class="pw" style="left:-543px;top:-565px;width:166px;height:210px;">
+        <div class="pc" data-rot="315"><img src="images/aleksandra-b-wVtwlktxQE0-unsplash.jpg" alt=""></div>
+      </div>
+
+      <!-- θ=337.5° → left=−332 top=−706 -->
+      <div class="pw" style="left:-332px;top:-706px;width:166px;height:210px;">
+        <div class="pc" data-rot="337.5"><img src="images/joshua-rondeau-EIeVusiphj4-unsplash.jpg" alt=""></div>
       </div>
 
     </div>
@@ -329,15 +341,16 @@
 
   function getProgress() {
     const scale  = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--scale')) || 1;
-    // arcSection: top=950px, height=2200px in unscaled page coords
-    const startPx = 950  * scale;          // screen-px where animation begins
-    const endPx   = 3150 * scale;          // screen-px where animation ends
-    const sy      = window.scrollY + window.innerHeight * 0.65;
+    // arcSection: top=1000px, height=2100px → page y 1000–3100
+    const startPx = 1000 * scale;
+    const endPx   = 3100 * scale;
+    const sy      = window.scrollY + window.innerHeight * 0.6;
     return Math.max(0, Math.min(1, (sy - startPx) / (endPx - startPx)));
   }
 
   window.addEventListener('scroll', () => {
-    targetRot = getProgress() * -180;
+    // Rotate 270° clockwise as user scrolls — shows all 16 cards
+    targetRot = getProgress() * 270;
   }, { passive: true });
 
   // RAF loop via GSAP ticker — lerp factor 0.07 = very smooth
@@ -351,9 +364,9 @@
 
   // Fade the arc section in as it enters the viewport
   window.addEventListener('scroll', () => {
-    const scale   = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--scale')) || 1;
-    const fadeStart = 900 * scale;
-    const fadeEnd   = 1200 * scale;
+    const scale     = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--scale')) || 1;
+    const fadeStart = 700 * scale;
+    const fadeEnd   = 1100 * scale;
     const t = Math.max(0, Math.min(1, (window.scrollY - fadeStart) / (fadeEnd - fadeStart)));
     document.getElementById('arcSection').style.opacity = t;
   }, { passive: true });
