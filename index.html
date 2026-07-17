@@ -138,37 +138,6 @@
       z-index: 5;
     }
 
-    /* ── HERO SLIDES ── */
-    .hero-slide {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-    }
-    .hero-slide.active { opacity: 1; }
-    .hero-slide img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* ── 4 PANEL REVEAL ── */
-    .hero-panels {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      z-index: 20;
-      pointer-events: none;
-    }
-    .hero-panel {
-      flex: 1;
-      height: 100%;
-      background: #fffaf5;
-      transform: translateX(101%);
-      will-change: transform;
-    }
-
     /* ── ARC WHEEL ── */
     .pw {
       position: absolute;
@@ -221,19 +190,9 @@
 
   <div class="nav-divider"></div>
 
-  <!-- HERO SLIDESHOW -->
-  <div class="hero" id="heroSlider">
-    <div class="hero-slide active"><img src="images/daniela-cuevas-t7YycgAoVSw-unsplash.jpg" alt=""></div>
-    <div class="hero-slide"><img src="images/neom-kXbit_yx8t4-unsplash.jpg" alt=""></div>
-    <div class="hero-slide"><img src="images/shaain-ibrahim-WhavwKQeFCw-unsplash.jpg" alt=""></div>
-    <div class="hero-slide"><img src="images/taras-terletskyy-OrhPYiKmXsE-unsplash.jpg" alt=""></div>
-    <div class="hero-slide"><img src="images/neom-aWHKsYkbCi8-unsplash.jpg" alt=""></div>
-    <div class="hero-panels">
-      <div class="hero-panel"></div>
-      <div class="hero-panel"></div>
-      <div class="hero-panel"></div>
-      <div class="hero-panel"></div>
-    </div>
+  <!-- HERO -->
+  <div class="hero">
+    <img src="images/daniela-cuevas-t7YycgAoVSw-unsplash.jpg" alt="Hero landscape" />
   </div>
   <p class="hero-title">Reverb.</p>
 
@@ -424,43 +383,6 @@
   });
 
 
-
-  // ── Hero slideshow — 4-panel wipe ──
-  const slides  = Array.from(document.querySelectorAll('.hero-slide'));
-  const panels  = Array.from(document.querySelectorAll('.hero-panel'));
-  let current = 0;
-  let animating = false;
-
-  function nextSlide() {
-    if (animating) return;
-    animating = true;
-
-    const next = slides[(current + 1) % slides.length];
-
-    // 1. Panels slide UP from below to cover current image (staggered)
-    gsap.set(panels, { x: '-101%' });
-    gsap.to(panels, {
-      x: '0%',
-      duration: 2,
-      ease: 'power2.inOut',
-      stagger: 0.24,
-      onComplete: () => {
-        slides[current].classList.remove('active');
-        current = (current + 1) % slides.length;
-        slides[current].classList.add('active');
-
-        gsap.to(panels, {
-          x: '101%',
-          duration: 2,
-          ease: 'power2.inOut',
-          stagger: 0.24,
-          onComplete: () => { animating = false; }
-        });
-      }
-    });
-  }
-
-  setInterval(nextSlide, 4000);
 </script>
 </body>
 </html>
