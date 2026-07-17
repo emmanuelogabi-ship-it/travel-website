@@ -166,17 +166,6 @@
       object-fit: cover;
     }
 
-    /* ── GRADIENT FADE ── */
-    .fade {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 1600px;
-      background: linear-gradient(to top, #fffaf5 45%, rgba(255,250,245,0) 80%);
-      pointer-events: none;
-      z-index: 10;
-    }
   </style>
 </head>
 <body>
@@ -307,8 +296,6 @@
     </div>
   </div>
 
-  <!-- Gradient fade out -->
-  <div class="fade"></div>
 
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -326,22 +313,18 @@
   applyScale();
   window.addEventListener('resize', applyScale);
 
-  // ── Set each card's initial tilt from data-rot ──
-  document.querySelectorAll('.pc').forEach(card => {
-    const rot = parseFloat(card.dataset.rot) || 0;
-    gsap.set(card, { rotation: rot });
-  });
+  const wheel  = document.getElementById('arcWheel');
+  const cards  = Array.from(document.querySelectorAll('.pc'));
+  const origRots = cards.map(c => parseFloat(c.dataset.rot) || 0);
 
-  // ── Smooth scroll-driven wheel rotation (lerp via GSAP ticker) ──
-  // Avoids ScrollTrigger fighting the CSS scale transform on .page.
-  const wheel = document.getElementById('arcWheel');
+  // Start cards upright (counter their outward tilt)
+  cards.forEach((c, i) => gsap.set(c, { rotation: 0 }));
 
   let targetRot  = 0;
   let currentRot = 0;
 
   function getProgress() {
-    const scale  = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--scale')) || 1;
-    // arcSection: top=1000px, height=2100px → page y 1000–3100
+    const scale   = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--scale')) || 1;
     const startPx = 1000 * scale;
     const endPx   = 3100 * scale;
     const sy      = window.scrollY + window.innerHeight * 0.6;
@@ -349,27 +332,19 @@
   }
 
   window.addEventListener('scroll', () => {
-    // Rotate 270° clockwise as user scrolls — shows all 16 cards
     targetRot = getProgress() * 270;
   }, { passive: true });
 
-  // RAF loop via GSAP ticker — lerp factor 0.07 = very smooth
   gsap.ticker.add(() => {
     const diff = targetRot - currentRot;
     if (Math.abs(diff) > 0.005) {
       currentRot += diff * 0.07;
       gsap.set(wheel, { rotation: currentRot });
+      // Counter-rotate each card to keep them upright as the wheel spins
+      cards.forEach(c => gsap.set(c, { rotation: -currentRot }));
     }
   });
 
-  // Fade the arc section in as it enters the viewport
-  window.addEventListener('scroll', () => {
-    const scale     = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--scale')) || 1;
-    const fadeStart = 700 * scale;
-    const fadeEnd   = 1100 * scale;
-    const t = Math.max(0, Math.min(1, (window.scrollY - fadeStart) / (fadeEnd - fadeStart)));
-    document.getElementById('arcSection').style.opacity = t;
-  }, { passive: true });
 
 </script>
 </body>
