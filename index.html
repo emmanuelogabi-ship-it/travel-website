@@ -140,25 +140,25 @@
       z-index: 5;
     }
 
-    /* ── ARC PHOTOS ── */
-    .photo-wrap {
+    /* ── ARC WHEEL ── */
+    .pw {
       position: absolute;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 2;
     }
 
-    .photo-card {
+    .pc {
       border-radius: 11px;
       overflow: hidden;
       width: 166px;
       height: 210px;
       position: relative;
       flex-shrink: 0;
+      will-change: transform;
     }
 
-    .photo-card img {
+    .pc img {
       position: absolute;
       inset: 0;
       width: 100%;
@@ -212,106 +212,86 @@
   <!-- SEARCH CARD -->
   <div class="search-card"></div>
 
-  <!-- ── ARC PHOTOS ──
-       Positions translated from Figma 1606px canvas → 1440px (scale x ×0.897)
-       Each .photo-wrap is positioned at the bounding box; .photo-card is rotated inside.
+  <!-- ── ARC WHEEL ──
+       All 14 cards are children of #arcWheel, positioned relative to the
+       circle centre at page (720, 2050). GSAP rotates the whole wheel on scroll.
+       Card offsets = card_page_pos − (720, 2050).
   -->
+  <div id="arcSection" style="position:absolute;top:950px;left:0;width:1440px;height:2200px;pointer-events:none;overflow:visible;">
+    <div id="arcWheel" style="position:absolute;left:720px;top:1100px;width:0;height:0;transform-origin:0 0;will-change:transform;">
 
-  <!-- Center top — upright -->
-  <div class="photo-wrap" data-rot="0" style="left:634px; top:1286px; width:166px; height:210px;">
-    <div class="photo-card">
-      <img src="images/taras-terletskyy-OrhPYiKmXsE-unsplash.jpg" alt="" />
-    </div>
-  </div>
+      <!-- card helper: each .pw sits at offset from wheel centre; .pc holds the tilt -->
 
-  <!-- Slight left — −23° -->
-  <div class="photo-wrap" data-rot="-23" style="left:332px; top:1315px; width:237px; height:260px;">
-    <div class="photo-card">
-      <img src="images/tania-mousinho-vF0l0bqLRKY-unsplash.jpg" alt="" />
-    </div>
-  </div>
+      <!-- 0 — top centre, 0° -->
+      <div class="pw" style="left:-83px;top:-814px;width:166px;height:210px;">
+        <div class="pc" data-rot="0"><img src="images/taras-terletskyy-OrhPYiKmXsE-unsplash.jpg" alt=""></div>
+      </div>
 
-  <!-- Slight right — +23° -->
-  <div class="photo-wrap" data-rot="23" style="left:869px; top:1317px; width:237px; height:260px;">
-    <div class="photo-card">
-      <img src="images/daniela-cuevas-t7YycgAoVSw-unsplash.jpg" alt="" />
-    </div>
-  </div>
+      <!-- 1 — slight left, −23° -->
+      <div class="pw" style="left:-388px;top:-785px;width:237px;height:260px;">
+        <div class="pc" data-rot="-23"><img src="images/tania-mousinho-vF0l0bqLRKY-unsplash.jpg" alt=""></div>
+      </div>
 
-  <!-- Left — 135° -->
-  <div class="photo-wrap" data-rot="135" style="left:112px; top:1468px; width:266px; height:266px;">
-    <div class="photo-card">
-      <img src="images/aleksandra-b-wVtwlktxQE0-unsplash.jpg" alt="" />
-    </div>
-  </div>
+      <!-- 2 — slight right, +23° -->
+      <div class="pw" style="left:149px;top:-783px;width:237px;height:260px;">
+        <div class="pc" data-rot="23"><img src="images/daniela-cuevas-t7YycgAoVSw-unsplash.jpg" alt=""></div>
+      </div>
 
-  <!-- Right — −135° -->
-  <div class="photo-wrap" data-rot="-135" style="left:1057px; top:1468px; width:266px; height:266px;">
-    <div class="photo-card">
-      <img src="images/shaain-ibrahim-WhavwKQeFCw-unsplash.jpg" alt="" />
-    </div>
-  </div>
+      <!-- 3 — left, 135° -->
+      <div class="pw" style="left:-608px;top:-632px;width:266px;height:266px;">
+        <div class="pc" data-rot="135"><img src="images/aleksandra-b-wVtwlktxQE0-unsplash.jpg" alt=""></div>
+      </div>
 
-  <!-- Far left — −67° -->
-  <div class="photo-wrap" data-rot="-67" style="left:-29px; top:1729px; width:257px; height:234px;">
-    <div class="photo-card">
-      <img src="images/miraxh-tereziu-1RKlecE_ehI-unsplash.jpg" alt="" />
-    </div>
-  </div>
+      <!-- 4 — right, −135° -->
+      <div class="pw" style="left:337px;top:-632px;width:266px;height:266px;">
+        <div class="pc" data-rot="-135"><img src="images/shaain-ibrahim-WhavwKQeFCw-unsplash.jpg" alt=""></div>
+      </div>
 
-  <!-- Far right — −113° -->
-  <div class="photo-wrap" data-rot="-113" style="left:1198px; top:1709px; width:259px; height:234px;">
-    <div class="photo-card">
-      <img src="images/ionut-dobre-0D1nf8pKON8-unsplash.jpg" alt="" />
-    </div>
-  </div>
+      <!-- 5 — far left, −67° -->
+      <div class="pw" style="left:-749px;top:-371px;width:257px;height:234px;">
+        <div class="pc" data-rot="-67"><img src="images/miraxh-tereziu-1RKlecE_ehI-unsplash.jpg" alt=""></div>
+      </div>
 
-  <!-- Lower left — −113° -->
-  <div class="photo-wrap" data-rot="-113" style="left:-22px; top:2313px; width:259px; height:237px;">
-    <div class="photo-card">
-      <img src="images/anna-murzilon-Eu8v-aKZdFg-unsplash.jpg" alt="" />
-    </div>
-  </div>
+      <!-- 6 — far right, −113° -->
+      <div class="pw" style="left:478px;top:-391px;width:259px;height:234px;">
+        <div class="pc" data-rot="-113"><img src="images/ionut-dobre-0D1nf8pKON8-unsplash.jpg" alt=""></div>
+      </div>
 
-  <!-- Lower right — −67° -->
-  <div class="photo-wrap" data-rot="-67" style="left:1207px; top:2296px; width:257px; height:235px;">
-    <div class="photo-card">
-      <img src="images/pierre-blache-R5ne5S9R_cs-unsplash.jpg" alt="" />
-    </div>
-  </div>
+      <!-- 7 — lower left, −113° -->
+      <div class="pw" style="left:-742px;top:213px;width:259px;height:237px;">
+        <div class="pc" data-rot="-113"><img src="images/anna-murzilon-Eu8v-aKZdFg-unsplash.jpg" alt=""></div>
+      </div>
 
-  <!-- Lower far left — −135° -->
-  <div class="photo-wrap" data-rot="-135" style="left:112px; top:2522px; width:266px; height:266px;">
-    <div class="photo-card">
-      <img src="images/oleg-oros-YIQAvqbSyjw-unsplash.jpg" alt="" />
-    </div>
-  </div>
+      <!-- 8 — lower right, −67° -->
+      <div class="pw" style="left:487px;top:196px;width:257px;height:235px;">
+        <div class="pc" data-rot="-67"><img src="images/pierre-blache-R5ne5S9R_cs-unsplash.jpg" alt=""></div>
+      </div>
 
-  <!-- Lower far right — 135° -->
-  <div class="photo-wrap" data-rot="135" style="left:1057px; top:2522px; width:266px; height:266px;">
-    <div class="photo-card">
-      <img src="images/ryan-spencer-XGKaRnWjv1c-unsplash.jpg" alt="" />
-    </div>
-  </div>
+      <!-- 9 — lower far left, −135° -->
+      <div class="pw" style="left:-608px;top:422px;width:266px;height:266px;">
+        <div class="pc" data-rot="-135"><img src="images/oleg-oros-YIQAvqbSyjw-unsplash.jpg" alt=""></div>
+      </div>
 
-  <!-- Lower left of center — +23° -->
-  <div class="photo-wrap" data-rot="23" style="left:328px; top:2680px; width:237px; height:260px;">
-    <div class="photo-card">
-      <img src="images/niklas-ohlrogge-niamoh-de-BkmdKnuAZtw-unsplash.jpg" alt="" />
-    </div>
-  </div>
+      <!-- 10 — lower far right, 135° -->
+      <div class="pw" style="left:337px;top:422px;width:266px;height:266px;">
+        <div class="pc" data-rot="135"><img src="images/ryan-spencer-XGKaRnWjv1c-unsplash.jpg" alt=""></div>
+      </div>
 
-  <!-- Lower right of center — −23° -->
-  <div class="photo-wrap" data-rot="-23" style="left:866px; top:2682px; width:237px; height:260px;">
-    <div class="photo-card">
-      <img src="images/joshua-rawson-harris-S4ZkQykkeRs-unsplash.jpg" alt="" />
-    </div>
-  </div>
+      <!-- 11 — lower left of centre, +23° -->
+      <div class="pw" style="left:-392px;top:580px;width:237px;height:260px;">
+        <div class="pc" data-rot="23"><img src="images/niklas-ohlrogge-niamoh-de-BkmdKnuAZtw-unsplash.jpg" alt=""></div>
+      </div>
 
-  <!-- Bottom center — upright -->
-  <div class="photo-wrap" data-rot="0" style="left:634px; top:2771px; width:166px; height:210px;">
-    <div class="photo-card">
-      <img src="images/hasmik-ghazaryan-olson-z5ivBl5Dd1s-unsplash.jpg" alt="" />
+      <!-- 12 — lower right of centre, −23° -->
+      <div class="pw" style="left:146px;top:582px;width:237px;height:260px;">
+        <div class="pc" data-rot="-23"><img src="images/joshua-rawson-harris-S4ZkQykkeRs-unsplash.jpg" alt=""></div>
+      </div>
+
+      <!-- 13 — bottom centre, 0° -->
+      <div class="pw" style="left:-83px;top:671px;width:166px;height:210px;">
+        <div class="pc" data-rot="0"><img src="images/hasmik-ghazaryan-olson-z5ivBl5Dd1s-unsplash.jpg" alt=""></div>
+      </div>
+
     </div>
   </div>
 
@@ -319,64 +299,60 @@
   <div class="fade"></div>
 
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
+  gsap.registerPlugin(ScrollTrigger);
+
   // ── Scale page to fit any viewport ──
   function applyScale() {
     const scale = window.innerWidth / 1440;
     document.documentElement.style.setProperty('--scale', scale);
     document.body.style.height = (3200 * scale) + 'px';
+    ScrollTrigger.refresh();
   }
   applyScale();
   window.addEventListener('resize', applyScale);
 
-  // ── Scroll-driven arc animation ──
-  // Fan center: bottom-center of the semicircle (in unscaled page px)
+  // ── Set each card's initial tilt from data-rot ──
+  document.querySelectorAll('.pc').forEach(card => {
+    const rot = parseFloat(card.dataset.rot) || 0;
+    gsap.set(card, { rotation: rot });
+  });
+
+  // ── GSAP wheel rotation on scroll ──
+  // Rotate the wheel 180° as the arc section scrolls past,
+  // so every card passes through the visible top arc.
+  gsap.to('#arcWheel', {
+    rotation: -180,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#arcSection',
+      start: 'top 85%',
+      end: 'bottom 15%',
+      scrub: 1.5,
+    }
+  });
+
+  // Fade section in/out
+  gsap.fromTo('#arcSection',
+    { opacity: 0 },
+    {
+      opacity: 1,
+      duration: 0.5,
+      scrollTrigger: {
+        trigger: '#arcSection',
+        start: 'top 90%',
+        end: 'top 60%',
+        scrub: true,
+      }
+    }
+  );
+
+  // ── Legacy scroll scale (kept for non-GSAP elements) ──
   const FAN_X = 720;
   const FAN_Y = 2050;
 
-  // Pre-compute each card's offset from fan center
-  const wraps = Array.from(document.querySelectorAll('.photo-wrap'));
-  const cards = wraps.map(wrap => {
-    const left  = parseFloat(wrap.style.left)   || 0;
-    const top   = parseFloat(wrap.style.top)    || 0;
-    const w     = parseFloat(wrap.style.width)  || 166;
-    const h     = parseFloat(wrap.style.height) || 210;
-    const rot   = parseFloat(wrap.dataset.rot)  || 0;
-    return {
-      wrap,
-      inner: wrap.querySelector('.photo-card'),
-      cx: left + w / 2,
-      cy: top  + h / 2,
-      rot,
-    };
-  });
-
-  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
-
-  function animateArc() {
-    const scale  = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--scale')) || 1;
-    const scrollY = window.scrollY;
-    const viewH   = window.innerHeight;
-
-    // Arc enters view when the first card (~page y 1286) is ~80% down viewport
-    const arcPageY   = 1286 * scale;
-    const triggerY   = arcPageY - viewH * 0.8;   // scroll value when animation starts
-    const completeY  = arcPageY - viewH * 0.1;   // scroll value when fully fanned
-
-    const raw      = (scrollY - triggerY) / (completeY - triggerY);
-    const progress = easeOutCubic(Math.max(0, Math.min(1, raw)));
-
-    cards.forEach(({ wrap, inner, cx, cy, rot }) => {
-      const dx = (FAN_X - cx) * (1 - progress);
-      const dy = (FAN_Y - cy) * (1 - progress);
-      wrap.style.transform  = `translate(${dx}px, ${dy}px)`;
-      wrap.style.opacity    = Math.min(1, progress * 2);
-      inner.style.transform = `rotate(${rot * progress}deg)`;
-    });
-  }
-
-  window.addEventListener('scroll', animateArc, { passive: true });
-  animateArc(); // run once on load
 </script>
 </body>
 </html>
