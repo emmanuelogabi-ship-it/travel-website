@@ -163,8 +163,9 @@
     }
     .hero-panel {
       flex: 1;
+      height: 100%;
       background: #fffaf5;
-      transform: translateY(101%);
+      transform: translateX(101%);
       will-change: transform;
     }
 
@@ -437,21 +438,19 @@
     const next = slides[(current + 1) % slides.length];
 
     // 1. Panels slide UP from below to cover current image (staggered)
-    gsap.set(panels, { y: '101%' });
+    gsap.set(panels, { x: '101%' });
     gsap.to(panels, {
-      y: '0%',
+      x: '0%',
       duration: 2,
       ease: 'power2.inOut',
       stagger: 0.24,
       onComplete: () => {
-        // 2. Swap image while panels cover everything
         slides[current].classList.remove('active');
         current = (current + 1) % slides.length;
         slides[current].classList.add('active');
 
-        // 3. Panels slide UP off the top to reveal new image
         gsap.to(panels, {
-          y: '-101%',
+          x: '-101%',
           duration: 2,
           ease: 'power2.inOut',
           stagger: 0.24,
