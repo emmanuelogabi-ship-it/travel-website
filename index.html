@@ -440,9 +440,9 @@
     gsap.set(panels, { y: '101%' });
     gsap.to(panels, {
       y: '0%',
-      duration: 0.5,
+      duration: 2,
       ease: 'power2.inOut',
-      stagger: 0.06,
+      stagger: 0.24,
       onComplete: () => {
         // 2. Swap image while panels cover everything
         slides[current].classList.remove('active');
@@ -452,9 +452,9 @@
         // 3. Panels slide UP off the top to reveal new image
         gsap.to(panels, {
           y: '-101%',
-          duration: 0.5,
+          duration: 2,
           ease: 'power2.inOut',
-          stagger: 0.06,
+          stagger: 0.24,
           onComplete: () => { animating = false; }
         });
       }
