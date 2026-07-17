@@ -138,6 +138,30 @@
       z-index: 5;
     }
 
+    /* ── HERO SLIDES ── */
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      clip-path: inset(0 0 100% 0);
+      will-change: clip-path, transform;
+    }
+    .hero-slide.active {
+      clip-path: inset(0 0 0% 0);
+    }
+    .hero-slide img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.12);
+      transform-origin: center center;
+    }
+    .hero-slide.active img {
+      transform: scale(1);
+      transition: transform 6s ease;
+    }
+
     /* ── ARC WHEEL ── */
     .pw {
       position: absolute;
@@ -190,9 +214,13 @@
 
   <div class="nav-divider"></div>
 
-  <!-- HERO -->
-  <div class="hero">
-    <img src="images/daniela-cuevas-t7YycgAoVSw-unsplash.jpg" alt="Hero landscape" />
+  <!-- HERO SLIDESHOW -->
+  <div class="hero" id="heroSlider">
+    <div class="hero-slide active"><img src="images/daniela-cuevas-t7YycgAoVSw-unsplash.jpg" alt=""></div>
+    <div class="hero-slide"><img src="images/neom-kXbit_yx8t4-unsplash.jpg" alt=""></div>
+    <div class="hero-slide"><img src="images/shaain-ibrahim-WhavwKQeFCw-unsplash.jpg" alt=""></div>
+    <div class="hero-slide"><img src="images/taras-terletskyy-OrhPYiKmXsE-unsplash.jpg" alt=""></div>
+    <div class="hero-slide"><img src="images/neom-aWHKsYkbCi8-unsplash.jpg" alt=""></div>
   </div>
   <p class="hero-title">Reverb.</p>
 
@@ -383,6 +411,42 @@
   });
 
 
+
+  // ── Hero slideshow with clip-path wipe + scale reveal ──
+  const slides = Array.from(document.querySelectorAll('.hero-slide'));
+  let current = 0;
+
+  function nextSlide() {
+    const prev = slides[current];
+    current = (current + 1) % slides.length;
+    const next = slides[current];
+
+    // Prep incoming: behind, clipped from bottom, image zoomed in
+    gsap.set(next, { zIndex: 2, clipPath: 'inset(0 0 100% 0)' });
+    gsap.set(next.querySelector('img'), { scale: 1.12 });
+    prev.style.zIndex = 1;
+
+    // Wipe up + scale down
+    gsap.to(next, {
+      clipPath: 'inset(0 0 0% 0)',
+      duration: 1.1,
+      ease: 'power3.inOut',
+      onComplete: () => {
+        prev.classList.remove('active');
+        prev.style.zIndex = '';
+        next.classList.add('active');
+        next.style.zIndex = '';
+        gsap.set(prev, { clipPath: 'inset(0 0 100% 0)', zIndex: '' });
+      }
+    });
+    gsap.to(next.querySelector('img'), {
+      scale: 1,
+      duration: 1.6,
+      ease: 'power2.out'
+    });
+  }
+
+  setInterval(nextSlide, 4000);
 </script>
 </body>
 </html>
